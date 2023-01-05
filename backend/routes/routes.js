@@ -33,6 +33,7 @@ import {createProduct, fetchProduct} from "../controllers/products.js";
 
 import upload from "../config/multer.js";
 import { uploadImage } from "../controllers/imageupload.js";
+import {createOrder, fetchOrder} from "../controllers/orders.js";
 
 // init of from express router
 const router = express.Router();
@@ -109,6 +110,11 @@ router.get("/api/food-categories", fetchFoodCategory);
 ////////////////////////// Product Management ////////////////////////////////
 router.post("/api/products", createProduct);
 router.get("/api/products", fetchProduct);
+
+
+////////////////////////// Order Management ////////////////////////////////
+router.post("/api/orders", createOrder);
+router.get("/api/orders", fetchOrder);
 
 
 // export default router
