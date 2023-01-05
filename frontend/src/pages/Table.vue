@@ -49,11 +49,18 @@
                   class="form-control"
                   name="oPeople"
                   id="oPeople"
-                  v-model="orderObj.people"
+                  v-model="orderObj.table_type"
                   required
+                  @change="fetchTableNames"
                 >
                   <option value="" selected hidden>Table Type</option>
-                  <option v-for="(tableType, index) in tableTypes" :key="'table type'+index">{{tableType}}</option>
+                  <option
+                    v-for="(tableType, index) in tableTypes"
+                    :key="'table type' + index"
+                    :value="tableType"
+                  >
+                    {{ tableType.split("_").join(" ") }}
+                  </option>
                 </select>
                 <span class="select-arrow"></span>
                 <span class="form-label">Seat Type</span>
@@ -68,11 +75,16 @@
                   class="form-control"
                   name="oTables"
                   id="oTables"
-                  v-model="orderObj.tables"
+                  v-model="orderObj.table_name"
                   required
                 >
                   <option value="" selected hidden>Table Name</option>
-				  <option v-for="(tableName, index) in tableNames" :key="'table name'+index">{{tableName}}</option>
+                  <option
+                    v-for="(tableName, index) in tableNames"
+                    :key="'table name' + index"
+                  >
+                    {{ tableName.split("_").join(" ") }}
+                  </option>
                 </select>
                 <span class="select-arrow"></span>
                 <span class="form-label">Table Type</span>
@@ -90,7 +102,6 @@
                   name="oWhen"
                   id="oWhen"
                   v-model="orderObj.when"
-                  @click="availableTime()"
                   required
                 />
                 <span class="form-label">Time</span>
@@ -126,6 +137,7 @@ export default {
       errorObj: { peopleErr: [], tablesErr: [], whenErr: [] },
       tableTypes: [],
       tableNames: [],
+      tables: [],
     };
   },
   mounted() {
@@ -133,16 +145,21 @@ export default {
   },
 
   methods: {
+    fetchTableNames() {
+      const tableNames = this.tables.filter(table => {
+        console.log('table', table)
+        return table.table_type === this.orderObj.table_type
+      })
+      this.tableNames = [...new Set(tableNames.map((type) => type.table_name))];
+      console.log('this.tableNames', this.tableNames, this.tables)
+      this.$forceUpdate()
+    },
     async fetchTableConfig() {
       try {
         const response = await axios.get("book-tables");
+        this.tables = response.data;
         const res = JSON.parse(JSON.stringify(response.data));
-        this.tableTypes = res.map(type=> {
-			return type.table_type
-		});
-		this.tableNames = res.map(type=> {
-			return type.table_name
-		});
+        this.tableTypes = [...new Set(res.map((type) => type.table_type))];
 
         console.log("error", response);
       } catch (error) {
