@@ -2,13 +2,15 @@
   <div class="admin-container">
     <div class="row">
       <div class="col-12">
-      <button
-        class="btn mb-2 float-right"
-        @click.prevent="$router.push('/admin/dashboard/product-add-or-update')"
-      >
-        Add new product
-      </button>
-    </div>
+        <button
+          class="btn mb-2 float-right"
+          @click.prevent="
+            $router.push('/admin/dashboard/product-add-or-update')
+          "
+        >
+          Add new product
+        </button>
+      </div>
     </div>
     <div class="row my-2">
       <div class="col-4"><span>Choose Category:</span></div>
@@ -93,7 +95,7 @@ export default {
       products: [],
       categories: [],
       categoriesNames: [],
-      choosenCategory: ''
+      choosenCategory: "",
     };
   },
   async mounted() {
@@ -105,9 +107,11 @@ export default {
       console.log("evenbt ", event);
       const categoryId = this.categories.find(
         (category) =>
-          category.name === this.choosenCategory.toLocaleLowerCase()
+          category.name.toLowerCase() === this.choosenCategory.toLowerCase()
       ).id;
-      this.products = this.productData.filter(product=> product.category_id === categoryId)
+      this.products = this.productData.filter(
+        (product) => product.category_id === categoryId
+      );
     },
     async fetchAvailableCategories() {
       try {

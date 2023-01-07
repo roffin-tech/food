@@ -53,15 +53,11 @@
           />
         </div>
       </div>
-      
+
       <div class="row mt-2 form-group">
         <div class="col-4"><span>Price:</span></div>
         <div class="col-8">
-          <input
-            type="number"
-            class="form-control"
-            v-model="product.price"
-          />
+          <input type="number" class="form-control" v-model="product.price" />
         </div>
       </div>
 
@@ -150,9 +146,13 @@ export default {
   },
   methods: {
     onProductCategoryChange(event) {
-    console.log('evenbt ', event)
-    this.product.category_id = this.categories.find(category => category.name === this.product.category_name.toLocaleLowerCase()).id
-  },
+      console.log("evenbt ", event);
+      this.product.category_id = this.categories.find(
+        (category) =>
+          category.name.toLowerCase() ===
+          this.product.category_name.toLowerCase()
+      ).id;
+    },
     async handleSubmit() {
       this.errors = [];
       console.log("on product submit", this.product);
@@ -180,7 +180,7 @@ export default {
       try {
         const response = await axios.get("food-categories");
         const res = JSON.parse(JSON.stringify(response.data));
-        this.categories = res;
+        this.categories = JSON.parse(JSON.stringify(res));
         this.categoriesNames = res.map((category) => category.name);
         console.log("error", response);
       } catch (error) {
