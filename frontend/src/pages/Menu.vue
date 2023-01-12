@@ -209,7 +209,6 @@
                 </button></label
               >
             </li>
-
             <li>
               <input
                 type="button"
@@ -307,16 +306,15 @@
                             value="snacks" @click="filterFoodBtn($event)" /> -->
           </div>
         </div>
-
         <div class="row box-container">
-          <div v-for="(f, index) in currentPageItems" :key="index">
+          <div v-for="(f, index) in filteredFood" :key="index">
             <div class="box">
               <!-- <a href="" class="fas fa-heart"></a> -->
               <div class="image">
-                <img :src="require(`../assets/images/${f.food_src}`)" alt="" />
+                <img :src="'localhost:8081/'+f.image" alt="" width="15vw" />
               </div>
               <div class="content">
-                <h3>{{ f.food_name }}</h3>
+                <h3>{{ f.name }}</h3>
                 <!-- <div class="stars">
                                     <div v-for="s in Math.floor(parseFloat(f.food_star))" :key="s" class="d-inline">
                                         <i class="fas fa-star"></i>
@@ -328,13 +326,11 @@
                                     <span> ({{ f.food_vote }}) </span>
                                 </div> -->
                 <div class="desc">
-                  <p>{{ f.food_desc }}</p>
+                  <p>{{ f.description }}</p>
                 </div>
                 <div class="price">
-                  {{ parseFloat(f.food_price) - parseFloat(f.food_discount) }}
-                  <span v-if="parseFloat(f.food_discount) != 0.0">{{
-                    parseFloat(f.food_price)
-                  }}</span>
+                  {{ parseFloat(f.price)  }}
+                  
                 </div>
                 <button class="btn" @click="addItem(index)">Add to cart</button>
               </div>
@@ -381,7 +377,6 @@
 <script>
 import axios from "axios";
 import QuickView from "@/components/QuickView.vue";
-import { mapState } from "vuex";
 export default {
   name: "Menu",
 
@@ -400,40 +395,58 @@ export default {
       previousTypeClicked: "",
       categories: [],
       categoriesNames: [],
+      allFoods: []
     };
   },
 
   computed: {
-    ...mapState(["allFoods"]),
 
-    filterFoods: function () {
+    filteredFood: function () {
+      console.log('this.foodObj', this.foodObj)
       return this.allFoods.filter(
         (f) =>
-          f.food_name.toLowerCase().match(this.foodObj.name.toLowerCase()) &&
-          (f.food_category.match(this.foodObj.category) ||
+          (f.category_name.match(this.foodObj.category.toLocaleLowerCase()) ||
             this.foodObj.category == "all" ||
-            this.foodObj.category == "") &&
-          this.evaluatePrice(f, this.foodObj.price) &&
-          f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
-          this.evaluateStatus(f, this.foodObj.status)
+            this.foodObj.category == "")
+            
+          //   &&
+          // this.evaluatePrice(f, this.foodObj.price) &&
+          // f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
+          // this.evaluateStatus(f, this.foodObj.status)
+      );
+    },
+    filterFoods: function () {
+      console.log('this.foodObj', this.foodObj)
+      return this.allFoods.filter(
+        (f) =>
+          (f.category_name.match(this.foodObj.category.toLocaleLowerCase()) ||
+            this.foodObj.category == "all" ||
+            this.foodObj.category == "")
+            
+          //   &&
+          // this.evaluatePrice(f, this.foodObj.price) &&
+          // f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
+          // this.evaluateStatus(f, this.foodObj.status)
       );
     },
     currentPageItems: function () {
+      console.log('this.filterFoods', this.filterFoods)
       return this.filterFoods.slice(
         this.pageNum * this.perPage,
         this.pageNum * this.perPage + this.perPage
       );
     },
     calculatePages: function () {
-      if (this.filterFoods.length % this.perPage != 0) {
+      if (this.filterFoods.length && this.perPage != 0) {
         return Math.floor(this.filterFoods.length / this.perPage) + 1;
       } else {
         return this.filterFoods.length / this.perPage;
       }
     },
   },
-  mounted() {
-    this.fetchAvailableCategories()
+  async mounted() {
+    await this.fetchAvailableCategories()
+    await this.fetchAllFoods()
   },
   methods: {
     set(val) {
@@ -539,6 +552,7 @@ export default {
       }
     },
     filterFoodBtn: function (e) {
+      console.log('filter food',this.foodObj.category )
       this.pageNum = 0;
       if (
         this.foodObj.category != e.target.value &&
@@ -676,6 +690,16 @@ export default {
         const res = JSON.parse(JSON.stringify(response.data));
         this.categories = res;
         this.categoriesNames = res.map((category) => category.name);
+        console.log("error", response);
+      } catch (error) {
+        console.log("error", error.data);
+      }
+    },
+     async fetchAllFoods() {
+      try {
+        const response = await axios.get("products");
+        const res = JSON.parse(JSON.stringify(response.data));
+        this.allFoods = res;
         console.log("error", response);
       } catch (error) {
         console.log("error", error.data);
