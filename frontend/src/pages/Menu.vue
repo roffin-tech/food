@@ -311,7 +311,7 @@
             <div class="box">
               <!-- <a href="" class="fas fa-heart"></a> -->
               <div class="image">
-                <img :src="'localhost:8081/'+f.image" alt="" width="15vw" />
+                <img :src="'http://localhost:8081/'+f.image" alt="" style="width: 15vw;" />
               </div>
               <div class="content">
                 <h3>{{ f.name }}</h3>
