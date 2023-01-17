@@ -135,7 +135,7 @@ export default {
       console.log('this.foodObj', this.foodObj)
       return this.allFoods.filter(
         (f) =>
-          (f.category_name.match(this.foodObj.category.toLocaleLowerCase()) ||
+          (f.category_name.toLocaleLowerCase().match(this.foodObj.category.toLocaleLowerCase()) ||
             this.foodObj.category == "all" ||
             this.foodObj.category == "")
             
