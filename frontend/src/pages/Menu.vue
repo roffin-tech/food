@@ -9,12 +9,15 @@
       <div class="col-sm-12">
         <div class="row">
           <div class="menu-tabs">
-            <input type="button" id="burritoFilterFoodBtn" name="burritoFilterFoodBtn" class="menu-tab-item"
-                            value="all" @click="filterFoodBtn($event)" />
-            <template
-              v-for="(category, index) in categories"
-              :key="index"
-            >
+            <input
+              type="button"
+              id="burritoFilterFoodBtn"
+              name="burritoFilterFoodBtn"
+              class="menu-tab-item"
+              value="all"
+              @click="filterFoodBtn($event)"
+            />
+            <template v-for="(category, index) in categories" :key="index">
               <input
                 type="button"
                 id="allFilterFoodBtn"
@@ -41,7 +44,11 @@
             <div class="box">
               <!-- <a href="" class="fas fa-heart"></a> -->
               <div class="image">
-                <img :src="'http://localhost:8081/'+f.image" alt="" style="width: 15vw;" />
+                <img
+                  :src="'http://localhost:8081/' + f.image"
+                  alt=""
+                  style="width: 15vw"
+                />
               </div>
               <div class="content">
                 <h3>{{ f.name }}</h3>
@@ -59,10 +66,9 @@
                   <p>{{ f.description }}</p>
                 </div>
                 <div class="price">
-                  {{ parseFloat(f.price)  }}
-                  
+                  {{ parseFloat(f.price) }}
                 </div>
-                <button class="btn" @click="addItem(index)">Add to cart</button>
+                <button class="btn" @click.stop="addItem(f)">Add to cart</button>
               </div>
             </div>
           </div>
@@ -98,7 +104,8 @@
       </div>
     </div>
 
-    <QuickView v-if="showQuickView" :food="sendId">
+    <QuickView v-if="showQuickView" :food="sendId"
+      >3.
       <button class="btn" @click="closeView">X</button>
     </QuickView>
   </div>
@@ -106,6 +113,7 @@
 
 <script>
 import axios from "axios";
+import { mapState, mapMutations } from "vuex";
 import QuickView from "@/components/QuickView.vue";
 export default {
   name: "Menu",
@@ -125,42 +133,44 @@ export default {
       previousTypeClicked: "",
       categories: [],
       categoriesNames: [],
-      allFoods: []
+      allFoods: [],
     };
   },
 
   computed: {
-
+    ...mapState(["user"]),
     filteredFood: function () {
-      console.log('this.foodObj', this.foodObj)
+      console.log("this.foodObj", this.foodObj);
       return this.allFoods.filter(
         (f) =>
-          (f.category_name.toLocaleLowerCase().match(this.foodObj.category.toLocaleLowerCase()) ||
-            this.foodObj.category == "all" ||
-            this.foodObj.category == "")
-            
-          //   &&
-          // this.evaluatePrice(f, this.foodObj.price) &&
-          // f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
-          // this.evaluateStatus(f, this.foodObj.status)
+          f.category_name
+            .toLocaleLowerCase()
+            .match(this.foodObj.category.toLocaleLowerCase()) ||
+          this.foodObj.category == "all" ||
+          this.foodObj.category == ""
+
+        //   &&
+        // this.evaluatePrice(f, this.foodObj.price) &&
+        // f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
+        // this.evaluateStatus(f, this.foodObj.status)
       );
     },
     filterFoods: function () {
-      console.log('this.foodObj', this.foodObj)
+      console.log("this.foodObj", this.foodObj);
       return this.allFoods.filter(
         (f) =>
-          (f.category_name.match(this.foodObj.category.toLocaleLowerCase()) ||
-            this.foodObj.category == "all" ||
-            this.foodObj.category == "")
-            
-          //   &&
-          // this.evaluatePrice(f, this.foodObj.price) &&
-          // f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
-          // this.evaluateStatus(f, this.foodObj.status)
+          f.category_name.match(this.foodObj.category.toLocaleLowerCase()) ||
+          this.foodObj.category == "all" ||
+          this.foodObj.category == ""
+
+        //   &&
+        // this.evaluatePrice(f, this.foodObj.price) &&
+        // f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
+        // this.evaluateStatus(f, this.foodObj.status)
       );
     },
     currentPageItems: function () {
-      console.log('this.filterFoods', this.filterFoods)
+      console.log("this.filterFoods", this.filterFoods);
       return this.filterFoods.slice(
         this.pageNum * this.perPage,
         this.pageNum * this.perPage + this.perPage
@@ -175,10 +185,11 @@ export default {
     },
   },
   async mounted() {
-    await this.fetchAvailableCategories()
-    await this.fetchAllFoods()
+    await this.fetchAvailableCategories();
+    await this.fetchAllFoods();
   },
   methods: {
+    ...mapMutations(["setCart"]),
     set(val) {
       this.pageNum = val;
     },
@@ -282,7 +293,7 @@ export default {
       }
     },
     filterFoodBtn: function (e) {
-      console.log('filter food',this.foodObj.category )
+      console.log("filter food", this.foodObj.category);
       this.pageNum = 0;
       if (
         this.foodObj.category != e.target.value &&
@@ -391,9 +402,48 @@ export default {
         .querySelector(":scope > button").style.display = "none";
       this.previousTypeClicked = "";
     },
-    addItem: function (index) {
-      this.sendId = parseInt(this.currentPageItems[index].food_id);
-      this.showQuickView = !this.showQuickView;
+    addItem: function async(data) {
+      // this.sendId = parseInt(this.currentPageItems[index].food_id);
+      console.log("send id", data);
+      data.quantity = 1
+       this.setCart(data);
+      this.$router.push('/cart')
+      
+      // this.showQuickView = !this.showQuickView;
+    },
+    async addToCart() {
+      console.log("dhfdhddfhdfhdfh", this.user);
+      
+      // let existItem = await axios.get(
+      //   "/cartItem/" + parseInt(this.user.user_id) + "/" + data.id
+      // );
+
+      // if (existItem.data.length == 1) {
+      //   let data = {
+      //     user_id: parseInt(this.user.user_id),
+      //     food_id: parseInt(this.food),
+      //     item_qty: parseInt(this.qty) + parseInt(existItem.data[0].item_qty),
+      //   };
+      //   await axios.put("/cartItem/", data);
+      //   this.$refs.alert.showAlert(
+      //     "success",
+      //     "Thank you!",
+      //     "Add To Cart Successfully !"
+      //   );
+      // } else {
+      //   let data = {
+      //     user_id: parseInt(this.user.user_id),
+      //     food_id: parseInt(this.food),
+      //     item_qty: parseInt(this.qty),
+      //   };
+
+      //   await axios.post("/cartItem/", data);
+      //   this.$refs.alert.showAlert(
+      //     "success",
+      //     "Thank you!",
+      //     "Add To Cart Successfully !"
+      //   );
+      // }
     },
 
     closeView: function () {
@@ -425,7 +475,7 @@ export default {
         console.log("error", error.data);
       }
     },
-     async fetchAllFoods() {
+    async fetchAllFoods() {
       try {
         const response = await axios.get("products");
         const res = JSON.parse(JSON.stringify(response.data));
