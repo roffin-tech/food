@@ -25,7 +25,13 @@ import {
 } from "../controllers/cart.js";
 
 import {
-   createBook, createBooking,  fetchBookedTables, fetchBookedTablesByTableId, updateBookedTable, deleteBookedTable
+    createBook,
+    createBooking,
+    fetchBookedTables,
+    fetchBookedTablesByTableId,
+    updateBookedTable,
+    deleteBookedTable,
+    fetchBookings
 } from "../controllers/booktable.js";
 
 import {createFoodCategory,fetchFoodCategory} from "../controllers/foodcategory.js";
@@ -96,9 +102,10 @@ router.delete("/api/cartItem/:id", deleteItems);
 
 
 ////////////////////////// Booking section ////////////////////////////////
-router.post("/api/booking", createBook);
-router.post("/api/book-tables", createBooking);
-router.get("/api/book-tables", fetchBookedTables);
+router.post("/api/booking", createBook); //Create booking
+router.post("/api/book-tables", createBooking); // Table config add
+router.get("/api/book-tables", fetchBookedTables);// Table config add
+router.get("/api/bookings", fetchBookings);// Get booked tables
 router.get("/api/book-tables/:table_id", fetchBookedTablesByTableId);
 router.put("/api/book-tables/:table_id", updateBookedTable);
 router.delete("/api/book-tables/:table_id", deleteBookedTable);
