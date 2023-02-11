@@ -277,6 +277,7 @@ export default {
           "Booking Successfully !"
         );
         document.getElementById("bookTableForm").reset();
+        this.$router.push('/menu')
       }
     },
   },
