@@ -3,7 +3,7 @@ import db from "../config/database.js";
 
 // insert Booking
 export const insertBook = (data,result) => {
-    db.query("INSERT INTO booktable SET ?",data, (err,results)=> {
+    db.query("INSERT INTO bookings SET ?",data, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
