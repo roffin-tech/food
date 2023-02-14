@@ -126,6 +126,7 @@
 // class="btn" -->
 
 <script>
+import { mapState } from "vuex";
 import axios from "axios";
 import VueBasicAlert from "vue-basic-alert";
 export default {
@@ -143,16 +144,18 @@ export default {
   mounted() {
     this.fetchTableConfig();
   },
-
+  computed: {
+    ...mapState(["userId"]),
+  },
   methods: {
     fetchTableNames() {
-      const tableNames = this.table_name.filter(table => {
-        console.log('table', table)
-        return table.table_type === this.orderObj.table_type
-      })
+      const tableNames = this.table_name.filter((table) => {
+        console.log("table", table);
+        return table.table_type === this.orderObj.table_type;
+      });
       this.tableNames = [...new Set(tableNames.map((type) => type.table_name))];
-      console.log('this.tableNames', this.tableNames, this.table_name)
-      this.$forceUpdate()
+      console.log("this.tableNames", this.tableNames, this.table_name);
+      this.$forceUpdate();
     },
     async fetchTableConfig() {
       try {
@@ -206,7 +209,7 @@ export default {
     },
 
     checkForm: function () {
-      console.log(this.orderObj)
+      console.log(this.orderObj);
       this.resetCheckErr();
 
       if (!this.orderObj.table_type) {
@@ -220,7 +223,9 @@ export default {
       }
 
       if (!this.orderObj.table_name) {
-        this.errorObj.tablesErr.push("Entering number of table_name is required");
+        this.errorObj.tablesErr.push(
+          "Entering number of table_name is required"
+        );
       } else {
         if (parseInt(this.orderObj.table_name) > 50) {
           this.errorObj.tablesErr.push(
@@ -239,12 +244,8 @@ export default {
           this.errorObj.whenErr.push("Invalid date input");
         }
 
-        if (
-          dateInput.getTime() < dateMin.getTime()
-        ) {
-          this.errorObj.whenErr.push(
-            "Available reservation from post 1 hour"
-          );
+        if (dateInput.getTime() < dateMin.getTime()) {
+          this.errorObj.whenErr.push("Available reservation from post 1 hour");
         }
 
         if (dateInput.getHours() < 7 || dateInput.getHours() > 22) {
@@ -267,6 +268,7 @@ export default {
           table_type: this.orderObj.table_type,
           table_name: this.orderObj.table_name,
           date: this.orderObj.when,
+          user_id: this.userId,
         };
 
         await axios.post("/booking", data);
@@ -277,7 +279,7 @@ export default {
           "Booking Successfully !"
         );
         document.getElementById("bookTableForm").reset();
-        this.$router.push('/menu')
+        this.$router.push("/menu");
       }
     },
   },
