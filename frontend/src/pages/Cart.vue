@@ -156,7 +156,6 @@
           </div>
         </div>
       </div>
-      val{{ paymentSuccess }}
     </div>
   </div>
 </template>
@@ -193,7 +192,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['removeFromCart']),
+    ...mapMutations(['removeFromCart', 'resetCart']),
     matchID: function (food, cartArray) {
       let temp = "";
       cartArray.forEach((element) => {
@@ -264,7 +263,7 @@ export default {
 
     async createOrder() {
             try {
-                const response = await axios.post('http://localhost:8080/api/razor-pay/order', {
+                const response = await axios.post('/razor-pay/order', {
                     amount: this.totalPrice()*100,  // amount in the smallest currency unit
                     currency: "INR",
                     receipt: "order_rcptid_11"

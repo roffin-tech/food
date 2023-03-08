@@ -6,6 +6,7 @@ import About from '../pages/About.vue';
 import Menu from '../pages/Menu.vue';
 import Table from '../pages/Table.vue';
 import Cart from '../pages/Cart.vue';
+import Success from '../pages/Success.vue';
 import Admin from '../admin/Admin.vue';
 import Dashboard from '../admin/AdminHome.vue';
 import BookedTableManagement from '../admin/BookedTableManagement.vue';
@@ -42,6 +43,11 @@ const routes = [
     path: "/cart",
     name: "Cart",
     component: Cart,
+  },
+  {
+    path: "/success",
+    name: "Success",
+    component: Success,
   },
   {
     path: "/login",
