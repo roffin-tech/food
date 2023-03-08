@@ -4,14 +4,14 @@
       <router-view></router-view>
     </div>
     <div v-else>
-      <NavBar />
+      <NavBar v-if="$route.path !== '/success'"/>
 
       <div class="auth-wrapper">
         <div class="auth-inner">
           <router-view></router-view>
         </div>
       </div>
-      <FooterComponent />
+      <FooterComponent v-if="$route.path !== '/success'"/>
     </div>
   </div>
 </template>
