@@ -2,11 +2,10 @@
 
 import {
     getAllItems,
-    getAItem,
     insertToCart,
     updateCartItemQty,
     deleteItemInCart,
-    deleteAllItemsByUser
+    deleteAllItemsByUser, getItemByUserIdAndProductId
 } from "../models/CartModel.js";
 
 // get all Items
@@ -23,8 +22,8 @@ export const allItems=(req,res)=>{
 // get a Item
 export const getItem=(req,res)=>{
     const user_id = req.params.user_id;
-    const food_id = req.params.food_id;
-    getAItem(user_id,food_id,(err,results)=> {
+    const product_id = req.params.food_id;
+    getItemByUserIdAndProductId(user_id,product_id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -36,11 +35,25 @@ export const getItem=(req,res)=>{
 // add to cart
 export const addItems=(req,res)=>{
     const data = req.body;
-    insertToCart(data,(err,results)=> {
+    getItemByUserIdAndProductId(data.user_id,data.product_id,(err,results)=> {
         if (err) {
             res.send(err);
-        }else {
-            res.json(results);
+        } else if (results && results.length > 0) {
+            updateCartItemQty(data, (err, results) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.json(results);
+                }
+            });
+        } else {
+            insertToCart(data, (err, results) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.json(results);
+                }
+            });
         }
     });
 };

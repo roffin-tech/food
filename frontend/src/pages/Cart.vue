@@ -38,7 +38,7 @@
                   <div class="box-content row">
                     <div class="image-box col-sm-3" style="padding-left: 0">
                       <img
-                      :src="'http://localhost:8081/' + f.image"
+                        :src="'http://localhost:8081/' + f.image"
                         alt=""
                         class="cart-product-img"
                       />
@@ -61,7 +61,9 @@
                       }}</span>
                       <p
                         class="text-muted first-price"
-                        v-if="f.food_discount&&parseFloat(f.food_discount) != 0.0"
+                        v-if="
+                          f.food_discount && parseFloat(f.food_discount) != 0.0
+                        "
                       >
                         {{ parseFloat(f.food_price) }}
                       </p>
@@ -154,6 +156,7 @@
           </div>
         </div>
       </div>
+      val{{ paymentSuccess }}
     </div>
   </div>
 </template>
@@ -172,7 +175,13 @@ export default {
   },
 
   created() {
-    this.getAllCartItem();
+    // this.getAllCartItem();
+  },
+
+  mounted() {
+    let razorPayScript = document.createElement('script')
+        razorPayScript.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js')
+        document.head.appendChild(razorPayScript)
   },
 
   computed: {
@@ -250,8 +259,53 @@ export default {
     },
 
     checkOutBtn: function () {
-      this.$router.push("/checkout");
+      this.createOrder()
     },
+
+    async createOrder() {
+            try {
+                const response = await axios.post('http://localhost:8080/api/razor-pay/order', {
+                    amount: this.totalPrice()*100,  // amount in the smallest currency unit
+                    currency: "INR",
+                    receipt: "order_rcptid_11"
+                })
+                this.payment(response.id)
+                console.log('response', response)
+            } catch (error) {
+              console.log(error)
+            }
+        },
+        async payment(orderId) {
+          let a= this
+            // await
+            var options = {
+                "key": "rzp_test_iJs9lNifWJnygM", // Enter the Key ID generated from the Dashboard
+                "amount": this.totalPrice()*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "Hillstaurant",
+                "description": "Food Transaction",
+                "image": "https://example.com/your_logo",
+                "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function (response) {
+                  console.log('success', response)
+                    a.resetCart()
+                    a.$router.replace('/success')
+                },
+                "prefill": {
+                    "name": "",
+                    "email": "",
+                    "contact": ""
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            var pay = new window.Razorpay(options);
+            pay.open();
+        },
 
     async removeBtn(f) {
         this.removeFromCart(f)

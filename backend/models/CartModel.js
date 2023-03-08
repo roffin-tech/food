@@ -14,8 +14,8 @@ export const getAllItems = (id,result) => {
 };
 
 // get a items by user id, food id
-export const getAItem = (user,food,result) => {
-    db.query("SELECT * FROM cart WHERE user_id = ? AND food_id = ?",[user, food], (err,results)=> {
+export const getItemByUserIdAndProductId = (user,product,result) => {
+    db.query("SELECT * FROM cart WHERE user_id = ? AND product_id = ?",[user, product], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -39,7 +39,7 @@ export const insertToCart = (data,result) => {
 
 // update qty of a cart item
 export const updateCartItemQty = (data,result) => {
-    db.query("UPDATE cart SET item_qty = ? WHERE user_id = ? AND food_id = ?",[data.item_qty, data.user_id, data.food_id], (err,results)=> {
+    db.query("UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?",[data.quantity, data.user_id, data.product_id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -51,8 +51,8 @@ export const updateCartItemQty = (data,result) => {
 
 
 // delete cart item
-export const deleteItemInCart = (user,food,result) => {
-    db.query("DELETE FROM cart WHERE user_id = ? AND food_id = ?",[user,food], (err,results)=> {
+export const deleteItemInCart = (user,product,result) => {
+    db.query("DELETE FROM cart WHERE user_id = ? AND product_id = ?",[user,product], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

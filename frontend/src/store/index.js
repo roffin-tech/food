@@ -88,6 +88,9 @@ const store = new Vuex.Store({
         }
       }
     },
+    resetCart(state) {
+      state.cart = [];
+    },
   },
   actions: {
     async getFoodsData(context) {

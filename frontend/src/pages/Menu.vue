@@ -68,7 +68,9 @@
                 <div class="price">
                   {{ parseFloat(f.price) }}
                 </div>
-                <button class="btn" @click.stop="addItem(f)">Add to cart</button>
+                <button class="btn" @click.stop="addItem(f)">
+                  Add to cart
+                </button>
               </div>
             </div>
           </div>
@@ -402,18 +404,23 @@ export default {
         .querySelector(":scope > button").style.display = "none";
       this.previousTypeClicked = "";
     },
-    addItem: function async(data) {
+    async addItem(data) {
       // this.sendId = parseInt(this.currentPageItems[index].food_id);
       console.log("send id", data);
-      data.quantity = 1
-       this.setCart(data);
-      this.$router.push('/cart')
-      
+      data.quantity = 1;
+      data.product_id = data.id;
+      data.user_id = this.user.userId || 0;
+      const payload = JSON.parse(JSON.stringify(data))
+      delete payload.id
+      await axios.post("/cart/product/add", payload);
+      await this.setCart(data);
+      this.$router.push("/cart");
+
       // this.showQuickView = !this.showQuickView;
     },
     async addToCart() {
       console.log("dhfdhddfhdfhdfh", this.user);
-      
+
       // let existItem = await axios.get(
       //   "/cartItem/" + parseInt(this.user.user_id) + "/" + data.id
       // );

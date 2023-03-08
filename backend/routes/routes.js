@@ -82,7 +82,7 @@ router.post('/api/upload', upload.single('image'), uploadImage);
 
 ////////////////////////// CART section////////////////////////////////
 // add to cart
-router.post("/api/cartItem", addItems);
+router.post("/api/cart/product/add", addItems);
 
 // get a item in cart
 router.get("/api/cartItem/:user_id/:food_id", getItem);
