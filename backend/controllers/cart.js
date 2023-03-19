@@ -2,7 +2,9 @@
 
 import {
     getAllItems,
+    getCartByUserId,
     insertToCart,
+    updateStatus,
     updateCartItemQty,
     deleteItemInCart,
     deleteAllItemsByUser, getItemByUserIdAndProductId
@@ -11,6 +13,16 @@ import {
 // get all Items
 export const allItems=(req,res)=>{
     getAllItems(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+// get cart by user
+export const getCartByUser=(req,res)=>{
+    getCartByUserId(req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -35,7 +47,7 @@ export const getItem=(req,res)=>{
 // add to cart
 export const addItems=(req,res)=>{
     const data = req.body;
-    getItemByUserIdAndProductId(data.user_id,data.product_id,(err,results)=> {
+    getItemByUserIdAndProductId(data.user_id,(err,results)=> {
         if (err) {
             res.send(err);
         } else if (results && results.length > 0) {
@@ -47,6 +59,7 @@ export const addItems=(req,res)=>{
                 }
             });
         } else {
+            console.log('data', data)
             insertToCart(data, (err, results) => {
                 if (err) {
                     res.send(err);
@@ -63,6 +76,19 @@ export const addItems=(req,res)=>{
 export const updateItem=(req,res)=>{
     const data = req.body;
     updateCartItemQty(data,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+
+// update Item
+export const updateCartStatus=(req,res)=>{
+    const data = req.body;
+    updateStatus(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

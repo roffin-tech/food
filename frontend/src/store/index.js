@@ -22,11 +22,20 @@ const store = new Vuex.Store({
       userId: undefined,
       admin: undefined,
       cart: [],
+      table:{}
     };
+  },
+  getters: {
+    isLogined(state) {
+      return !!state.user
+    }
   },
   mutations: {
     setFoodsData(state, payload) {
       state.allFoods = payload;
+    },
+    setTable(state, payload){
+      state.table=payload
     },
     setUser(state, token) {
       if (token) {
@@ -68,6 +77,23 @@ const store = new Vuex.Store({
         if (index > -1) {
           console.log("index", index, payload);
           cartData[index].quantity = cartData[index].quantity + 1;
+          state.cart = cartData;
+        } else {
+          console.log("index", index, payload);
+          state.cart.push(payload);
+        }
+      } else state.cart.push(payload);
+    },
+    updateCartQuantity(state, payload) {
+      if (state.cart && state.cart.length > 0) {
+        const cartData = JSON.parse(JSON.stringify(state.cart));
+        const index = cartData.findIndex((item) => {
+          console.log(payload.id, item.id);
+          return payload.id === item.id;
+        });
+        if (index > -1) {
+          console.log("index", index, payload);
+          cartData[index].quantity = payload.quantity;
           state.cart = cartData;
         } else {
           console.log("index", index, payload);

@@ -140,7 +140,8 @@ export default {
   },
 
   computed: {
-    ...mapState(["user"]),
+    ...mapState(["user", "cart", "table"]),
+    
     filteredFood: function () {
       console.log("this.foodObj", this.foodObj);
       return this.allFoods.filter(
@@ -409,11 +410,22 @@ export default {
       console.log("send id", data);
       data.quantity = 1;
       data.product_id = data.id;
-      data.user_id = this.user.userId || 0;
-      const payload = JSON.parse(JSON.stringify(data))
-      delete payload.id
-      await axios.post("/cart/product/add", payload);
+      data.user_id = (this.user || {}).userId || 0;
+      const payload = JSON.parse(JSON.stringify(data));
+      delete payload.id;
+      payload.cart_details = [];
+      payload.cart_details?.push(JSON.stringify(payload));
       await this.setCart(data);
+      if ((this.user || {}).userId) {
+        let p = {
+          user_id: (this.user || {}).userId || 0,
+          table_details: (this.table || {}) || {},
+          cart_details: JSON.stringify(this.cart || []),
+          price: 0,
+        };
+        await axios.post("/cart/product/add", p);
+      }
+
       this.$router.push("/cart");
 
       // this.showQuickView = !this.showQuickView;

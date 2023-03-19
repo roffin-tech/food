@@ -177,10 +177,13 @@ export default {
     // this.getAllCartItem();
   },
 
-  mounted() {
-    let razorPayScript = document.createElement('script')
-        razorPayScript.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js')
-        document.head.appendChild(razorPayScript)
+  async mounted() {
+    let razorPayScript = document.createElement("script");
+    razorPayScript.setAttribute(
+      "src",
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+    document.head.appendChild(razorPayScript);
   },
 
   computed: {
@@ -192,7 +195,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['removeFromCart', 'resetCart']),
+    ...mapMutations(["removeFromCart", "resetCart", "updateCartQuantity"]),
     matchID: function (food, cartArray) {
       let temp = "";
       cartArray.forEach((element) => {
@@ -203,11 +206,11 @@ export default {
       return temp;
     },
     totalPrice() {
-        let price = 0
-        this.cart.forEach(item => {
-            price += (item.price * item.quantity)
-        })
-        return price
+      let price = 0;
+      this.cart.forEach((item) => {
+        price += item.price * item.quantity;
+      });
+      return price;
     },
 
     calculateItemPrice: function (index) {
@@ -239,15 +242,15 @@ export default {
       if (f.quantity < 1) {
         f.quantity = 1;
       } else {
-        this.updateCartQuantity(f.quantity)
+        this.updateCartQuantity(f.quantity);
       }
 
-    //   let data = {
-    //     user_id: parseInt(this.user.user_id),
-    //     food_id: parseInt(this.cartItem[i]),
-    //     item_qty: this.itemQuantity[i],
-    //   };
-    //   await axios.put("/cartItem/", data);
+      //   let data = {
+      //     user_id: parseInt(this.user.user_id),
+      //     food_id: parseInt(this.cartItem[i]),
+      //     item_qty: this.itemQuantity[i],
+      //   };
+      //   await axios.put("/cartItem/", data);
     },
 
     async cancelBtn() {
@@ -258,62 +261,67 @@ export default {
     },
 
     checkOutBtn: function () {
-      this.createOrder()
+      this.createOrder();
     },
 
     async createOrder() {
-            try {
-                const response = await axios.post('/razor-pay/order', {
-                    amount: this.totalPrice()*100,  // amount in the smallest currency unit
-                    currency: "INR",
-                    receipt: "order_rcptid_11"
-                })
-                this.payment(response.id)
-                console.log('response', response)
-            } catch (error) {
-              console.log(error)
-            }
+      try {
+        const response = await axios.post("/razor-pay/order", {
+          amount: this.totalPrice() * 100, // amount in the smallest currency unit
+          currency: "INR",
+          receipt: "order_rcptid_11",
+        });
+        this.payment(response.id);
+        console.log("response", response);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async payment(orderId) {
+      let a = this;
+      // await
+      var options = {
+        key: "rzp_test_iJs9lNifWJnygM", // Enter the Key ID generated from the Dashboard
+        amount: this.totalPrice() * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        currency: "INR",
+        name: "Hillstaurant",
+        description: "Food Transaction",
+        image: "https://example.com/your_logo",
+        order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        handler: function (response) {
+          console.log("success", response);
+          // a.updateCartStatus()
+          a.resetServerCartStatus();
+          a.resetCart();
+          a.$router.replace("/success");
         },
-        async payment(orderId) {
-          let a= this
-            // await
-            var options = {
-                "key": "rzp_test_iJs9lNifWJnygM", // Enter the Key ID generated from the Dashboard
-                "amount": this.totalPrice()*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                "currency": "INR",
-                "name": "Hillstaurant",
-                "description": "Food Transaction",
-                "image": "https://example.com/your_logo",
-                "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                "handler": function (response) {
-                  console.log('success', response)
-                    a.resetCart()
-                    a.$router.replace('/success')
-                },
-                "prefill": {
-                    "name": "",
-                    "email": "",
-                    "contact": ""
-                },
-                "notes": {
-                    "address": "Razorpay Corporate Office"
-                },
-                "theme": {
-                    "color": "#3399cc"
-                }
-            };
-            var pay = new window.Razorpay(options);
-            pay.open();
+        prefill: {
+          name: "",
+          email: "",
+          contact: "",
         },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      var pay = new window.Razorpay(options);
+      pay.open();
+    },
+    async resetServerCartStatus() {
+      await axios.put("/cart/user/status/" , {user_id: this.user.userId, status: 'purchased'});
+    },
 
     async removeBtn(f) {
-        this.removeFromCart(f)
-    //   await axios.delete(
-    //     "/cartItem/" + this.user.user_id + "/" + this.cartItem[index]
-    //   );
+      this.removeFromCart(f);
+      //   await axios.delete(
+      //     "/cartItem/" + this.user.user_id + "/" + this.cartItem[index]
+      //   );
 
-    //   this.cartItem.splice(index, 1);
-    //   this.itemQuantity.splice(index, 1);
+      //   this.cartItem.splice(index, 1);
+      //   this.itemQuantity.splice(index, 1);
     },
 
     async getAllCartItem() {

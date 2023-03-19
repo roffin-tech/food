@@ -1,9 +1,21 @@
 // import connection
 import db from "../config/database.js";
 
+// get all items
+export const getAllItems = (result) => {
+    const id= 'active'
+    db.query("SELECT * FROM cart WHERE status = ?",[id], (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
 // get all items by user id
-export const getAllItems = (id,result) => {
-    db.query("SELECT * FROM cart WHERE user_id = ?",[id], (err,results)=> {
+export const getCartByUserId = (id,result) => {
+    db.query("SELECT * FROM cart WHERE user_id = ? AND status= ?",[id, "active"], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -14,8 +26,8 @@ export const getAllItems = (id,result) => {
 };
 
 // get a items by user id, food id
-export const getItemByUserIdAndProductId = (user,product,result) => {
-    db.query("SELECT * FROM cart WHERE user_id = ? AND product_id = ?",[user, product], (err,results)=> {
+export const getItemByUserIdAndProductId = (user,result) => {
+    db.query("SELECT * FROM cart WHERE user_id = ? AND status = ?",[user, "active"], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -39,7 +51,19 @@ export const insertToCart = (data,result) => {
 
 // update qty of a cart item
 export const updateCartItemQty = (data,result) => {
-    db.query("UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?",[data.quantity, data.user_id, data.product_id], (err,results)=> {
+    db.query("UPDATE cart SET cart_details = ? WHERE user_id = ?  AND status = ?",[data.cart_details, data.user_id, "active"], (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+// update qty of a cart item
+export const updateStatus = (data,result) => {
+    db.query("UPDATE cart SET status = ? WHERE user_id = ?",[data.status, data.user_id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

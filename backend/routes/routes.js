@@ -20,7 +20,9 @@ import {
   addItems,
   getItem,
   updateItem,
+  updateCartStatus,
   allItems,
+  getCartByUser,
   deleteItem,
   deleteItems,
 } from "../controllers/cart.js";
@@ -91,10 +93,16 @@ router.post("/api/cart/product/add", addItems);
 router.get("/api/cartItem/:user_id/:food_id", getItem);
 
 // get all items by user id
-router.get("/api/cartItem/:id", allItems);
+router.get("/api/cart/user/:id", getCartByUser);
+
+// get all items in cart
+router.get("/api/cart", allItems);
 
 // update item qty
 router.put("/api/cartItem/", updateItem);
+
+// update item qty
+router.put("/api/cart/user/status", updateCartStatus);
 
 // delete a item in cart
 router.delete("/api/cartItem/:user_id/:food_id", deleteItem);
