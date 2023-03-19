@@ -17,11 +17,11 @@
       </div>
     </div>
 
-    <div class="home-category">
+    <div class="home-category" v-if="!!user && !!user.userId">
       <template v-for="(category, index) in categories" :key="index">
-        <router-link @click="scrollToTop()" to="/menu" class="box">
-          <img :src="'http://localhost:8081/'+category.image" alt="" />
-          <h3>{{category.name}}</h3>
+        <router-link @click="scrollToTop()" to="/table" class="box">
+          <img :src="'http://localhost:8081/' + category.image" alt="" />
+          <h3>{{ category.name }}</h3>
         </router-link>
       </template>
     </div>
@@ -105,6 +105,7 @@
 
 <script>
 import axios from "axios";
+import { mapState } from "vuex";
 export default {
   name: "Home",
   data() {
@@ -115,6 +116,9 @@ export default {
   },
   mounted() {
     this.fetchAvailableCategories();
+  },
+  computed: {
+    ...mapState(["user"]),
   },
   methods: {
     scrollToTop() {
