@@ -278,7 +278,7 @@ export default {
         };
 
         await axios.post("/booking", data);
-        await this.setTable(data)
+        await this.setTable(JSON.stringify(data))
 
         this.$refs.alert.showAlert(
           "success",

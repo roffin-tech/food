@@ -24,7 +24,7 @@ import {
   allItems,
   getCartByUser,
   deleteItem,
-  deleteItems,
+  deleteItems, getAllPurchasedCart,
 } from "../controllers/cart.js";
 
 import {
@@ -103,6 +103,9 @@ router.put("/api/cartItem/", updateItem);
 
 // update item qty
 router.put("/api/cart/user/status", updateCartStatus);
+
+// get all purchased cart
+router.get("/api/orders", getAllPurchasedCart);
 
 // delete a item in cart
 router.delete("/api/cartItem/:user_id/:food_id", deleteItem);

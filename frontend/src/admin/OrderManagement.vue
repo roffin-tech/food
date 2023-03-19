@@ -5,51 +5,14 @@
         <tr>
           <th>Table Type</th>
           <th>Table Name</th>
-          <th>Seats</th>
-          <th>Description</th>
-          <th>Image</th>
-          <th>Action</th>
-          <th>Action</th>
+          <th>Booking Time From</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(tableInfo, index) in tablesData" :key="index">
-          <td>{{ tableInfo.table_type }}</td>
-          <td>{{ tableInfo.table_name }}</td>
-          <td>{{ tableInfo.count }}</td>
-          <td>{{ tableInfo.table_description }}</td>
-          <td>
-            <img
-              :src="'http://localhost:8081/' + tableInfo.table_image"
-              alt=""
-              style="width: 10vw"
-            />
-          </td>
-          <td>
-            <button
-              class="btn"
-              @click.prevent="
-                $router.push({
-                  path: '/admin/dashboard/table-add-or-edit',
-                  query: {
-                    table_id: tableInfo.table_id,
-                  },
-                })
-              "
-            >
-              Edit
-            </button>
-          </td>
-          <td>
-            <button
-              class="btn"
-              @click.prevent="
-                deleteTableConfig(tableInfo.table_id)
-              "
-            >
-              Delete
-            </button>
-          </td>
+        <tr v-for="(tableInfo, index) in tablesData" :key="index" @click="$router.push('/admin/dashboard/order-details')">
+          <td>{{ tableInfo?.table_details?.table_type || `Parcel ${index+1}` }}</td>
+          <td>{{ tableInfo?.table_details?.table_name || "" }}</td>
+          <td>{{new Date(tableInfo?.table_details?.date || new Date()) }}</td>
         </tr>
       </tbody>
     </table>
@@ -70,8 +33,15 @@ export default {
   methods: {
     async fetchBookedTables() {
       try {
-        const response = await axios.get("book-tables");
-        this.tablesData = response.data;
+        const response = await axios.get("orders");
+        this.tablesData = response?.data || [];
+        this.tablesData =
+          this.tablesData && this.tablesData.length > 0
+            ? this.tablesData.map((table) => {
+                table.table_details = JSON.parse(table?.table_details || "{}");
+                return table;
+              })
+            : [];
         console.log("error", response);
       } catch (error) {
         console.log("error", error.data);
@@ -79,8 +49,8 @@ export default {
     },
     async deleteTableConfig(id) {
       try {
-        const response = await axios.delete("book-tables/"+id);
-        await this.fetchBookedTables()
+        const response = await axios.delete("book-tables/" + id);
+        await this.fetchBookedTables();
         console.log("error", response);
       } catch (error) {
         console.log("error", error.data);

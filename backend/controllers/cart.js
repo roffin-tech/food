@@ -7,7 +7,7 @@ import {
     updateStatus,
     updateCartItemQty,
     deleteItemInCart,
-    deleteAllItemsByUser, getItemByUserIdAndProductId
+    deleteAllItemsByUser, getItemByUserIdAndProductId, getAllPurchasedCarts
 } from "../models/CartModel.js";
 
 // get all Items
@@ -23,6 +23,16 @@ export const allItems=(req,res)=>{
 // get cart by user
 export const getCartByUser=(req,res)=>{
     getCartByUserId(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+// get all purchased cart
+export const getAllPurchasedCart=(req,res)=>{
+    getAllPurchasedCarts(req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

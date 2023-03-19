@@ -24,6 +24,17 @@ export const getCartByUserId = (id,result) => {
         }
     });
 };
+// get all purchased items
+export const getAllPurchasedCarts = (id,result) => {
+    db.query("SELECT * FROM cart WHERE status= ?",[ "purchased"], (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
 
 // get a items by user id, food id
 export const getItemByUserIdAndProductId = (user,result) => {
