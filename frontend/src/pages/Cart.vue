@@ -210,7 +210,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["removeFromCart", "resetCart", "updateCartQuantity"]),
+    ...mapMutations(["removeFromCart", "resetCart", "updateCartQuantity", "setTable"]),
     matchID: function (food, cartArray) {
       let temp = "";
       cartArray.forEach((element) => {
@@ -319,6 +319,7 @@ export default {
           // a.updateCartStatus()
           a.resetServerCartStatus();
           a.resetCart();
+          a.setTable(undefined);
           a.$router.replace("/success");
         },
         prefill: {

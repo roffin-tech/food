@@ -141,6 +141,9 @@ export default {
 
   computed: {
     ...mapState(["user", "cart", "table"]),
+    parsedTableData() {
+      return this.table ? JSON.parse(this.table) : null;
+    },
 
     filteredFood: function () {
       console.log("this.foodObj", this.foodObj);
@@ -407,7 +410,7 @@ export default {
     },
     async addItem(data) {
       // this.sendId = parseInt(this.currentPageItems[index].food_id);
-      if ((this.table || {}).table_id) {
+      if ((this.parsedTableData || {}).table_id) {
         console.log("send id", data);
         data.quantity = 1;
         data.product_id = data.id;
@@ -430,8 +433,8 @@ export default {
         this.$router.push("/cart");
       } else {
         this.$toast.info("Please secure seat before order.", {
-          position:'bottom'
-        })
+          position: "bottom",
+        });
         this.$router.push("/table");
       }
 
