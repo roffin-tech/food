@@ -22,6 +22,7 @@ export const fetchOrder=(req,res)=>{
         }
     });
 };
+
 // // fetch Booked tables
 // export const fetchBookedTablesByTableId=(req,res)=>{
 //     getBookedTablesById(req.params.table_id, (err,results)=> {

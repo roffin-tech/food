@@ -6,6 +6,8 @@ import About from '../pages/About.vue';
 import Menu from '../pages/Menu.vue';
 import Table from '../pages/Table.vue';
 import Cart from '../pages/Cart.vue';
+import OrdersList from '../pages/OrderManagement.vue';
+import OrdersCustomerDetails from '../pages/OrderDetails.vue';
 import Success from '../pages/Success.vue';
 import Admin from '../admin/Admin.vue';
 import Dashboard from '../admin/AdminHome.vue';
@@ -60,6 +62,16 @@ const routes = [
     path: "/register",
     name: "Register",
     component: Register,
+  },
+  {
+    path: "/orders",
+    name: "OrdersList",
+    component: OrdersList,
+  },
+  {
+    path: "/order-details",
+    name: "OrdersCustomerDetails",
+    component: OrdersCustomerDetails,
   },
   {
     path: "/admin",

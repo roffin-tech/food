@@ -28,6 +28,19 @@ export const fetchOrderData = (result) => {
     });
 };
 
+
+// update qty of a cart item
+export const updateOrder = (data,result) => {
+    db.query("UPDATE orders SET cart_details = ? WHERE user_id = ?  AND status = ?",[data.cart_details, data.user_id, "active"], (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
 // get Booking by table id
 export const getBookedTablesById = (id, result) => {
     db.query("SELECT * FROM taleconfig WHERE table_id= ?",[id], (err,results)=> {

@@ -10,7 +10,7 @@ import {
   deleteAllItemsByUser,
   getItemByUserIdAndProductId,
   getAllPurchasedCarts,
-  getAllPurchasedCartByIdData,
+  getAllPurchasedCartByIdData, updateStatusUsingOrderId,
 } from "../models/CartModel.js";
 
 // get all Items
@@ -111,6 +111,18 @@ export const updateItem = (req, res) => {
 export const updateCartStatus = (req, res) => {
   const data = req.body;
   updateStatus(data, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
+  });
+};
+
+// update Item
+export const updateStatusUsingOrderIdData = (req, res) => {
+  const data = req.body;
+  updateStatusUsingOrderId(data, (err, results) => {
     if (err) {
       res.send(err);
     } else {

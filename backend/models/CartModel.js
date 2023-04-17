@@ -26,7 +26,7 @@ export const getCartByUserId = (id,result) => {
 };
 // get all purchased items
 export const getAllPurchasedCarts = (id,result) => {
-    db.query("SELECT * FROM cart WHERE status= ?",[ "purchased"], (err,results)=> {
+    db.query("SELECT * FROM cart WHERE status= ? OR status=?",[ "purchased","cancelled"], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -37,7 +37,7 @@ export const getAllPurchasedCarts = (id,result) => {
 };
 // get all purchased items
 export const getAllPurchasedCartByIdData = (id,result) => {
-    db.query("SELECT * FROM cart WHERE status= ? AND id=?",[ "purchased", id], (err,results)=> {
+    db.query("SELECT * FROM cart WHERE status= ? OR status=? AND id=?",[ "purchased","cancelled", id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -86,6 +86,18 @@ export const updateCartItemQty = (data,result) => {
 // update qty of a cart item
 export const updateStatus = (data,result) => {
     db.query("UPDATE cart SET status = ? WHERE user_id = ?",[data.status, data.user_id], (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+// update qty of a cart item
+export const updateStatusUsingOrderId = (data,result) => {
+    db.query("UPDATE cart SET status = ? WHERE id = ?",[data.status, data.id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
