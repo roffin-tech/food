@@ -2,6 +2,8 @@
 
 // import express - is for building the Rest apis
 import express from "express";
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config()
 
 // import body-parser - helps to parse the request and create the req.body object
 import bodyParser from "body-parser";
@@ -15,6 +17,7 @@ import router from "./routes/routes.js";
 /** image accessible through web added */
 import path from 'path';
 import { fileURLToPath } from 'url';
+
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
