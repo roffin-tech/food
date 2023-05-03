@@ -42,7 +42,7 @@
       >
         <ul class="drop-down-select">
           <li>
-            <router-link @click="scrollToTop()" to="/myorder"
+            <router-link @click="scrollToTop()" to="/orders"
               >my orders</router-link
             >
           </li>

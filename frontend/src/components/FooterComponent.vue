@@ -45,7 +45,7 @@
           <router-link @click="scrollToTop()" to="/cart">
             <i class="fas fa-arrow-right"></i> my order
           </router-link>
-          <router-link @click="scrollToTop()" to="/myorder">
+          <router-link @click="scrollToTop()" to="/orders">
             <i class="fas fa-arrow-right"></i> my orders
           </router-link>
         </div>
