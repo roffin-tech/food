@@ -44,7 +44,7 @@
       >
         <ul class="drop-down-select">
           <li>
-            <router-link @click.native="scrollToTop()" to="/myorder"
+            <router-link @click.native="scrollToTop()" to="/orders"
               >my orders</router-link
             >
           </li>
