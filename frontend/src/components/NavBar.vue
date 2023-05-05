@@ -5,10 +5,10 @@
     </router-link>
 
     <nav class="navbar" v-if="!isAdmin">
-      <router-link @click.native="scrollToTop()" to="/">home</router-link>
+      <router-link @click.native="scrollToTop()" to="/" >home</router-link>
       <router-link @click.native="scrollToTop()" to="/about">about</router-link>
-      <a @click.native="review()" to="" target="_blank" v-if="user" href="">review site</a>
-      <a @click.native="nutrient()" to="" target="_blank" href="" v-if="user">nutrient check</a>
+      <a @click.native="review()"  v-if="user" href="#">review site</a>
+      <a @click.native="nutrient()"  href="#" v-if="user">nutrient check</a>
       <router-link @click.native="scrollToTop()" to="/menu" v-if="user"
         >menu</router-link
       >
