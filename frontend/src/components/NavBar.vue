@@ -5,31 +5,31 @@
     </router-link>
 
     <nav class="navbar" v-if="!isAdmin">
-      <router-link @click="scrollToTop()" to="/">home</router-link>
-      <router-link @click="scrollToTop()" to="/about">about</router-link>
-      <router-link @click="review()" to="" target="_blank" v-if="user">review site</router-link>
-      <router-link @click="nutrient()" to="" target="_blank" v-if="user">nutrient check</router-link>
-      <router-link @click="scrollToTop()" to="/menu" v-if="user"
+      <router-link @click.native="scrollToTop()" to="/">home</router-link>
+      <router-link @click.native="scrollToTop()" to="/about">about</router-link>
+      <router-link @click.native="review()" to="" target="_blank" v-if="user">review site</router-link>
+      <router-link @click.native="nutrient()" to="" target="_blank" v-if="user">nutrient check</router-link>
+      <router-link @click.native="scrollToTop()" to="/menu" v-if="user"
         >menu</router-link
       >
-      <router-link @click="scrollToTop()" to="/table" v-if="user"
+      <router-link @click.native="scrollToTop()" to="/table" v-if="user"
         >table</router-link
       >
     </nav>
 
     <div class="icons" v-if="!isAdmin">
       <div id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>
-      <router-link @click="scrollToTop()" to="cart">
+      <router-link @click.native="scrollToTop()" to="cart">
         <div class="fas fa-shopping-cart cart"></div>
       </router-link>
 
       <div v-if="!user" class="fas fa-user account" @click="showLog">
         <ul class="drop-down-select">
           <li>
-            <router-link @click="scrollToTop()" to="/login">login</router-link>
+            <router-link @click.native="scrollToTop()" to="/login">login</router-link>
           </li>
           <li>
-            <router-link @click="scrollToTop()" to="/register"
+            <router-link @click.native="scrollToTop()" to="/register"
               >register</router-link
             >
           </li>
@@ -44,12 +44,12 @@
       >
         <ul class="drop-down-select">
           <li>
-            <router-link @click="scrollToTop()" to="/myorder"
+            <router-link @click.native="scrollToTop()" to="/myorder"
               >my orders</router-link
             >
           </li>
           <li>
-            <router-link @click="handleLogout" to="/">logout</router-link>
+            <router-link @click.native="handleLogout" to="/">logout</router-link>
           </li>
         </ul>
       </div>
@@ -57,7 +57,7 @@
     <!-- <div class="admin-logout-btn"> -->
     <nav class="navbar" v-if="isAdmin" style="width: 50%">
       <span style="font-size: 2em; font-weight: 700">Admin</span>
-      <router-link @click="handleLogout" to="/admin" v-if="isAdmin"
+      <router-link @click.native="handleLogout" to="/admin" v-if="isAdmin"
         >logout</router-link
       >
     </nav>
@@ -90,10 +90,10 @@ export default {
       window.scrollTo(0, 0);
     },
     review(){
-          window.location.replace(" http://localhost:3000/");
+          window.location.replace("https://sentiment.lffoodfest.live/");
       },
       nutrient(){
-          window.location.replace("http://localhost:3001/");
+          window.location.replace("https://nutrient.lffoodfest.live/");
       },
     showNav: function () {
       let navbar = document.querySelector(".header .navbar");
