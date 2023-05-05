@@ -71,7 +71,7 @@
         <div class="col-4"></div>
         <div class="col-8" v-if="isImageUploaded">
           <img
-            :src="'http://localhost:8081/' + hotel.table_image"
+            :src="process.env.VUE_APP_BASE_URL+'/' + hotel.table_image"
             alt=""
             style="width: 10vw"
           />

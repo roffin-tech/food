@@ -20,7 +20,7 @@
     <div class="home-category" v-if="!!user && !!user.userId">
       <template v-for="(category, index) in categories" :key="index">
         <router-link @click="scrollToTop()" to="/table" class="box">
-          <img :src="'http://localhost:8081/' + category.image" alt="" />
+          <img :src="process.env.VUE_APP_BASE_URL+'/' + category.image" alt="" />
           <h3>{{ category.name }}</h3>
         </router-link>
       </template>

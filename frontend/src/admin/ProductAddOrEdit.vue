@@ -76,7 +76,7 @@
         <div class="col-4"></div>
         <div class="col-8" v-if="isImageUploaded">
           <img
-            :src="'http://localhost:8081/' + product.image"
+            :src="process.env.VUE_APP_BASE_URL+'/' + product.image"
             alt=""
             style="width: 10vw"
           />
