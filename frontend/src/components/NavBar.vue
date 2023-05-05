@@ -93,7 +93,7 @@ export default {
           window.location.replace("https://sentiment.lffoodfest.live/");
       },
       nutrient(){
-          window.location.replace("https://nutrient.lffoodfest.live/");
+          window.location.replace("https://nutri.lffoodfest.live/");
       },
     showNav: function () {
       let navbar = document.querySelector(".header .navbar");
