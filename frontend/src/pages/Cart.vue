@@ -44,7 +44,7 @@
                     <div class="box-content row">
                       <div class="image-box col-sm-3" style="padding-left: 0">
                         <img
-                          :src="process.env.VUE_APP_BASE_URL+'/' + f.image"
+                          :src="'http://localhost:8081/' + f.image"
                           alt=""
                           class="cart-product-img"
                         />

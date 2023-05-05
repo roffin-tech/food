@@ -44,7 +44,7 @@
 
           <td>
             <img
-              :src="process.env.VUE_APP_BASE_URL+'/' + productInfo.image"
+              :src="'http://localhost:8081/' + productInfo.image"
               alt=""
               style="width: 10vw"
             />

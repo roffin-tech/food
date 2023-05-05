@@ -45,7 +45,7 @@
               <!-- <a href="" class="fas fa-heart"></a> -->
               <div class="image">
                 <img
-                  :src="process.env.VUE_APP_BASE_URL+'/' + f.image"
+                  :src="'http://localhost:8081/' + f.image"
                   alt=""
                   style="width: 15vw"
                 />

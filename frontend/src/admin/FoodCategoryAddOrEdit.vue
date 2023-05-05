@@ -41,7 +41,7 @@
         <div class="col-4"></div>
         <div class="col-8" v-if="isImageUploaded">
           <img
-            :src="process.env.VUE_APP_BASE_URL+'/' + foodCategory.image"
+            :src="'http://localhost:8081/' + foodCategory.image"
             alt=""
             style="width: 10vw"
           />

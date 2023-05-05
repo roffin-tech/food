@@ -28,7 +28,7 @@
           <td>{{ tableInfo.table_description }}</td>
           <td>
             <img
-              :src="process.env.VUE_APP_BASE_URL+'/' + tableInfo.table_image"
+              :src="'http://localhost:8081/' + tableInfo.table_image"
               alt=""
               style="width: 10vw"
             />

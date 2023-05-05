@@ -21,7 +21,7 @@
           
           <td>
             <img
-              :src="process.env.VUE_APP_BASE_URL+'/' + categoryInfo.image"
+              :src="'http://localhost:8081/' + categoryInfo.image"
               alt=""
               style="width: 10vw"
             />
