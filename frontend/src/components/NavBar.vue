@@ -5,31 +5,31 @@
     </router-link>
 
     <nav class="navbar" v-if="!isAdmin">
-      <router-link @click.native="scrollToTop()" to="/" >home</router-link>
-      <router-link @click.native="scrollToTop()" to="/about">about</router-link>
-      <a @click.native="review()"  v-if="user" href="#">review site</a>
-      <a @click.native="nutrient()"  href="#" v-if="user">nutrient check</a>
-      <router-link @click.native="scrollToTop()" to="/menu" v-if="user"
+      <router-link @click.stop="scrollToTop()" to="/" >home</router-link>
+      <router-link @click.stop="scrollToTop()" to="/about">about</router-link>
+      <a @click.stop="review()"  v-if="user" href="#">review site</a>
+      <a @click.stop="nutrient()"  href="#" v-if="user">nutrient check</a>
+      <router-link @click.stop="scrollToTop()" to="/menu" v-if="user"
         >menu</router-link
       >
-      <router-link @click.native="scrollToTop()" to="/table" v-if="user"
+      <router-link @click.stop="scrollToTop()" to="/table" v-if="user"
         >table</router-link
       >
     </nav>
 
     <div class="icons" v-if="!isAdmin">
       <div id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>
-      <router-link @click.native="scrollToTop()" to="cart">
+      <router-link @click.stop="scrollToTop()" to="cart">
         <div class="fas fa-shopping-cart cart"></div>
       </router-link>
 
       <div v-if="!user" class="fas fa-user account" @click="showLog">
         <ul class="drop-down-select">
           <li>
-            <router-link @click.native="scrollToTop()" to="/login">login</router-link>
+            <router-link @click.stop="scrollToTop()" to="/login">login</router-link>
           </li>
           <li>
-            <router-link @click.native="scrollToTop()" to="/register"
+            <router-link @click.stop="scrollToTop()" to="/register"
               >register</router-link
             >
           </li>
@@ -44,12 +44,12 @@
       >
         <ul class="drop-down-select">
           <li>
-            <router-link @click.native="scrollToTop()" to="/orders"
+            <router-link @click.stop="scrollToTop()" to="/orders"
               >my orders</router-link
             >
           </li>
           <li>
-            <router-link @click.native="handleLogout" to="/">logout</router-link>
+            <router-link @click.stop="handleLogout" to="/">logout</router-link>
           </li>
         </ul>
       </div>
@@ -57,7 +57,7 @@
     <!-- <div class="admin-logout-btn"> -->
     <nav class="navbar" v-if="isAdmin" style="width: 50%">
       <span style="font-size: 2em; font-weight: 700">Admin</span>
-      <router-link @click.native="handleLogout" to="/admin" v-if="isAdmin"
+      <router-link @click.stop="handleLogout" to="/admin" v-if="isAdmin"
         >logout</router-link
       >
     </nav>
